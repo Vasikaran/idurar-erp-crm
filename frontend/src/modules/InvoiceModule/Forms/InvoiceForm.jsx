@@ -26,10 +26,10 @@ export default function InvoiceForm({ subTotal = 0, current = null }) {
     return <></>;
   }
 
-  return <LoadInvoiceForm subTotal={subTotal} current={current} />;
+  return <LoadInvoiceForm subTotal={subTotal} current={current} showItemNotes={true} />;
 }
 
-function LoadInvoiceForm({ subTotal = 0, current = null }) {
+function LoadInvoiceForm({ subTotal = 0, current = null, showItemNotes = false }) {
   const translate = useLanguage();
   const { dateFormat } = useDate();
   const { last_invoice_number } = useSelector(selectFinanceSettings);
@@ -189,12 +189,21 @@ function LoadInvoiceForm({ subTotal = 0, current = null }) {
         <Col className="gutter-row" span={5}>
           <p>{translate('Total')}</p>
         </Col>
+        <Col className="gutter-row" span={24}>
+          <p style={{ marginTop: '8px', fontSize: '12px', color: '#666' }}>{translate('Notes')}</p>
+        </Col>
       </Row>
       <Form.List name="items">
         {(fields, { add, remove }) => (
           <>
             {fields.map((field) => (
-              <ItemRow key={field.key} remove={remove} field={field} current={current}></ItemRow>
+              <ItemRow
+                key={field.key}
+                remove={remove}
+                field={field}
+                current={current}
+                showItemNotes={showItemNotes}
+              ></ItemRow>
             ))}
             <Form.Item>
               <Button
