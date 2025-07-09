@@ -9,7 +9,7 @@ import { erp } from '@/redux/erp/actions';
 
 import { useErpContext } from '@/context/erp';
 
-export default function ErpPanel({ config, extra }) {
+export default function ErpPanel({ config, extra, headerExtra }) {
   const dispatch = useDispatch();
   const { state } = useErpContext();
   const { deleteModal } = state;
@@ -28,7 +28,7 @@ export default function ErpPanel({ config, extra }) {
 
   return (
     <>
-      <DataTable config={config} extra={extra} />
+      <DataTable config={config} extra={extra} headerExtra={headerExtra} />
       <Delete config={config} isOpen={deleteModal.isOpen} />
     </>
   );

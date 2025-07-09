@@ -77,6 +77,10 @@ const paginationSchema = Joi.object({
     'number.max': 'Limit cannot exceed 100',
     'number.integer': 'Limit must be an integer',
   }),
+
+  status: Joi.string().valid('open', 'in-progress', 'resolved', 'closed').optional().messages({
+    'any.only': 'Status must be one of: open, in-progress, resolved, closed',
+  }),
 });
 
 const objectIdSchema = Joi.string()

@@ -26,6 +26,7 @@ import {
   FilterOutlined,
   WalletOutlined,
   ReconciliationOutlined,
+  QuestionCircleOutlined,
 } from '@ant-design/icons';
 
 const { Sider } = Layout;
@@ -59,7 +60,6 @@ function Sidebar({ collapsible, isMobile = false }) {
       icon: <CustomerServiceOutlined />,
       label: <Link to={'/customer'}>{translate('customers')}</Link>,
     },
-
     {
       key: 'invoice',
       icon: <ContainerOutlined />,
@@ -71,11 +71,15 @@ function Sidebar({ collapsible, isMobile = false }) {
       label: <Link to={'/quote'}>{translate('quote')}</Link>,
     },
     {
+      key: 'query',
+      icon: <QuestionCircleOutlined />,
+      label: <Link to={'/query'}>{translate('queries')}</Link>,
+    },
+    {
       key: 'payment',
       icon: <CreditCardOutlined />,
       label: <Link to={'/payment'}>{translate('payments')}</Link>,
     },
-
     {
       key: 'paymentMode',
       label: <Link to={'/payment/mode'}>{translate('payments_mode')}</Link>,
@@ -198,14 +202,7 @@ function MobileSidebar() {
       >
         <MenuOutlined style={{ fontSize: 18 }} />
       </Button>
-      <Drawer
-        width={250}
-        // style={{ backgroundColor: 'rgba(255, 255, 255, 1)' }}
-        placement={'left'}
-        closable={false}
-        onClose={onClose}
-        open={visible}
-      >
+      <Drawer width={250} placement={'left'} closable={false} onClose={onClose} open={visible}>
         <Sidebar collapsible={false} isMobile={true} />
       </Drawer>
     </>

@@ -20,11 +20,12 @@ const paginatedList = async (req, res) => {
       });
     }
 
-    const { page, limit } = value;
+    const { page, limit, status } = value;
     const skip = (page - 1) * limit;
 
     const resultsPromise = Model.find({
       removed: { $ne: true },
+      ...(status ? { status } : {}),
     })
       .skip(skip)
       .limit(limit)
@@ -34,6 +35,7 @@ const paginatedList = async (req, res) => {
 
     const countPromise = Model.countDocuments({
       removed: { $ne: true },
+      ...(status ? { status } : {}),
     });
 
     const [result, count] = await Promise.all([resultsPromise, countPromise]);
