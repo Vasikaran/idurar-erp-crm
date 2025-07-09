@@ -39,9 +39,17 @@ function AddNewItem({ config }) {
   );
 }
 
-export default function DataTable({ config, extra = [] }) {
+export default function DataTable({ config, extra = [], headerExtra = [] }) {
   const translate = useLanguage();
-  let { entity, dataTableColumns, disableAdd = false, searchConfig } = config;
+  let {
+    entity,
+    dataTableColumns,
+    disableAdd = false,
+    searchConfig,
+    disableSearch = false,
+    disableDownload = false,
+    currentStatusFilter,
+  } = config;
 
   const { DATATABLE_TITLE } = config;
 
@@ -63,11 +71,15 @@ export default function DataTable({ config, extra = [] }) {
       key: 'edit',
       icon: <EditOutlined />,
     },
-    {
-      label: translate('Download'),
-      key: 'download',
-      icon: <FilePdfOutlined />,
-    },
+    ...(disableDownload
+      ? []
+      : [
+          {
+            label: translate('Download'),
+            key: 'download',
+            icon: <FilePdfOutlined />,
+          },
+        ]),
     ...extra,
     {
       type: 'divider',
@@ -153,6 +165,9 @@ export default function DataTable({ config, extra = [] }) {
 
   const handelDataTableLoad = (pagination) => {
     const options = { page: pagination.current || 1, items: pagination.pageSize || 10 };
+    if (currentStatusFilter) {
+      options.status = currentStatusFilter;
+    }
     dispatch(erp.list({ entity, options }));
   };
 
@@ -181,16 +196,19 @@ export default function DataTable({ config, extra = [] }) {
         onBack={() => window.history.back()}
         backIcon={<ArrowLeftOutlined />}
         extra={[
-          <AutoCompleteAsync
-            key={`${uniqueId()}`}
-            entity={searchConfig?.entity}
-            displayLabels={['name']}
-            searchFields={'name'}
-            onChange={filterTable}
-            // redirectLabel={'Add New Client'}
-            // withRedirect
-            // urlToRedirect={'/customer'}
-          />,
+          ...headerExtra,
+          disableSearch ? null : (
+            <AutoCompleteAsync
+              key={`${uniqueId()}`}
+              entity={searchConfig?.entity}
+              displayLabels={['name']}
+              searchFields={'name'}
+              onChange={filterTable}
+              // redirectLabel={'Add New Client'}
+              // withRedirect
+              // urlToRedirect={'/customer'}
+            />
+          ),
           <Button onClick={handelDataTableLoad} key={`${uniqueId()}`} icon={<RedoOutlined />}>
             {translate('Refresh')}
           </Button>,
