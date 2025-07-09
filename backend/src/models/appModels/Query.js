@@ -48,6 +48,10 @@ const QuerySchema = new mongoose.Schema(
       ref: 'Admin',
       required: true,
     },
+    removed: {
+      type: Boolean,
+      default: false,
+    },
   },
   {
     timestamps: true,
