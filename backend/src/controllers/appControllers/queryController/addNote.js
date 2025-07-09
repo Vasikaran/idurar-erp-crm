@@ -1,22 +1,38 @@
 const mongoose = require('mongoose');
+const { addNoteSchema, objectIdSchema } = require('./validations');
 
 const Model = mongoose.model('Query');
 
 const addNote = async (req, res) => {
   try {
-    const { content } = req.body;
-    const { id } = req.params;
-
-    if (!content || content.trim().length === 0) {
+    const idValidation = objectIdSchema.validate(req.params.id);
+    if (idValidation.error) {
       return res.status(400).json({
         success: false,
         result: null,
-        message: 'Note content is required',
+        message: 'Invalid query ID format',
       });
     }
 
+    const { error, value } = addNoteSchema.validate(req.body, {
+      abortEarly: false,
+      stripUnknown: true,
+    });
+
+    if (error) {
+      const errors = error.details.map((detail) => detail.message);
+      return res.status(400).json({
+        success: false,
+        result: null,
+        message: 'Validation error',
+        errors: errors,
+      });
+    }
+
+    const { content } = value;
+
     const query = await Model.findOne({
-      _id: id,
+      _id: req.params.id,
       removed: { $ne: true },
     });
 
@@ -40,12 +56,13 @@ const addNote = async (req, res) => {
     await query.populate('createdBy', 'name surname email');
     await query.populate('notes.createdBy', 'name surname');
 
-    return res.status(200).json({
+    return res.status(201).json({
       success: true,
       result: query,
       message: 'Note added successfully',
     });
   } catch (error) {
+    console.error('Error adding note:', error);
     return res.status(500).json({
       success: false,
       result: null,

@@ -1,26 +1,29 @@
 const mongoose = require('mongoose');
+const { objectIdSchema } = require('./validations');
 
 const Model = mongoose.model('Query');
 
 const deleteNote = async (req, res) => {
   try {
+    const idValidation = objectIdSchema.validate(req.params.id);
+    if (idValidation.error) {
+      return res.status(400).json({
+        success: false,
+        result: null,
+        message: 'Invalid query ID format',
+      });
+    }
+
+    const noteIdValidation = objectIdSchema.validate(req.params.noteId);
+    if (noteIdValidation.error) {
+      return res.status(400).json({
+        success: false,
+        result: null,
+        message: 'Invalid note ID format',
+      });
+    }
+
     const { id, noteId } = req.params;
-
-    if (!mongoose.Types.ObjectId.isValid(id)) {
-      return res.status(400).json({
-        success: false,
-        result: null,
-        message: 'Invalid query ID',
-      });
-    }
-
-    if (!mongoose.Types.ObjectId.isValid(noteId)) {
-      return res.status(400).json({
-        success: false,
-        result: null,
-        message: 'Invalid note ID',
-      });
-    }
 
     const query = await Model.findOne({
       _id: id,
@@ -57,6 +60,7 @@ const deleteNote = async (req, res) => {
       message: 'Note deleted successfully',
     });
   } catch (error) {
+    console.error('Error deleting note:', error);
     return res.status(500).json({
       success: false,
       result: null,

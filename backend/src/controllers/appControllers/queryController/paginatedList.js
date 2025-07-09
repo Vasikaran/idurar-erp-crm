@@ -1,12 +1,27 @@
 const mongoose = require('mongoose');
+const { paginationSchema } = require('./validations');
 
 const Model = mongoose.model('Query');
 
 const paginatedList = async (req, res) => {
   try {
-    const page = req.query.page || 1;
-    const limit = parseInt(req.query.limit) || 10;
-    const skip = page * limit - limit;
+    const { error, value } = paginationSchema.validate(req.query, {
+      abortEarly: false,
+      stripUnknown: true,
+    });
+
+    if (error) {
+      const errors = error.details.map((detail) => detail.message);
+      return res.status(400).json({
+        success: false,
+        result: null,
+        message: 'Pagination validation error',
+        errors: errors,
+      });
+    }
+
+    const { page, limit } = value;
+    const skip = (page - 1) * limit;
 
     const resultsPromise = Model.find({
       removed: { $ne: true },
@@ -47,6 +62,7 @@ const paginatedList = async (req, res) => {
       });
     }
   } catch (error) {
+    console.error('Error fetching queries:', error);
     return res.status(500).json({
       success: false,
       result: null,
