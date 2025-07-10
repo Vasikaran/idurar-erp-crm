@@ -177,6 +177,12 @@ const invoiceSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+  notesSummary: {
+    type: String,
+  },
+  summaryGeneratedAt: {
+    type: Date,
+  },
 });
 
 invoiceSchema.plugin(require('mongoose-autopopulate'));

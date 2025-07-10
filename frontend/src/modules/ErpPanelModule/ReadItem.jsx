@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Divider } from 'antd';
+import { Divider, Alert, Typography } from 'antd';
 
 import { Button, Row, Col, Descriptions, Statistic, Tag } from 'antd';
 import { PageHeader } from '@ant-design/pro-layout';
@@ -9,6 +9,7 @@ import {
   CloseCircleOutlined,
   RetweetOutlined,
   MailOutlined,
+  FileTextOutlined,
 } from '@ant-design/icons';
 
 import { useSelector, useDispatch } from 'react-redux';
@@ -23,6 +24,8 @@ import { DOWNLOAD_BASE_URL } from '@/config/serverApiConfig';
 import { useMoney, useDate } from '@/settings';
 import useMail from '@/hooks/useMail';
 import { useNavigate } from 'react-router-dom';
+
+const { Text, Paragraph } = Typography;
 
 const Item = ({ item, currentErp, showItemNotes = false }) => {
   const { moneyFormatter } = useMoney();
@@ -70,7 +73,11 @@ const Item = ({ item, currentErp, showItemNotes = false }) => {
             <p
               style={{
                 fontSize: '12px',
-                textAlign: 'right',
+                color: '#666',
+                wordBreak: 'break-word',
+                textAlign: 'left',
+                minHeight: '20px',
+                margin: 0,
               }}
             >
               {item.notes || '-'}
@@ -84,7 +91,40 @@ const Item = ({ item, currentErp, showItemNotes = false }) => {
   );
 };
 
-export default function ReadItem({ config, selectedItem, showItemNotes = false }) {
+const SummaryDisplay = ({ currentErp, translate }) => {
+  if (!currentErp.notesSummary) {
+    return null;
+  }
+
+  return (
+    <>
+      <Alert
+        message={translate('Notes Summary')}
+        description={
+          <div>
+            <Paragraph style={{ marginBottom: 8 }}>{currentErp.notesSummary}</Paragraph>
+            <Text type="secondary" style={{ fontSize: '12px' }}>
+              {translate('Generated on')}:{' '}
+              {new Date(currentErp.summaryGeneratedAt).toLocaleString()}
+            </Text>
+          </div>
+        }
+        type="info"
+        icon={<FileTextOutlined />}
+        style={{ marginBottom: 16 }}
+      />
+      <Divider />
+    </>
+  );
+};
+
+export default function ReadItem({
+  config,
+  selectedItem,
+  showItemNotes = false,
+  customButtons = [],
+  showSummary = false,
+}) {
   const translate = useLanguage();
   const { entity, ENTITY_NAME } = config;
   const dispatch = useDispatch();
@@ -140,6 +180,13 @@ export default function ReadItem({ config, selectedItem, showItemNotes = false }
     }
   }, [currentErp]);
 
+  const updateCurrentErp = (newData) => {
+    setCurrentErp((prev) => ({
+      ...prev,
+      ...newData,
+    }));
+  };
+
   return (
     <>
       <PageHeader
@@ -157,6 +204,11 @@ export default function ReadItem({ config, selectedItem, showItemNotes = false }
           ),
         ]}
         extra={[
+          ...customButtons.map((button) =>
+            button.key === 'generate-summary'
+              ? { ...button, props: { ...button.props, onSummaryGenerated: updateCurrentErp } }
+              : button
+          ),
           <Button
             key={`${uniqueId()}`}
             onClick={() => {
@@ -188,6 +240,7 @@ export default function ReadItem({ config, selectedItem, showItemNotes = false }
           >
             {translate('Send by Email')}
           </Button>,
+
           <Button
             key={`${uniqueId()}`}
             onClick={() => {
@@ -258,6 +311,8 @@ export default function ReadItem({ config, selectedItem, showItemNotes = false }
         <Descriptions.Item label={translate('Phone')}>{client.phone}</Descriptions.Item>
       </Descriptions>
       <Divider />
+
+      {showSummary && <SummaryDisplay currentErp={currentErp} translate={translate} />}
 
       <Row gutter={[12, 0]}>
         <Col className="gutter-row" span={showItemNotes ? 7 : 11}>

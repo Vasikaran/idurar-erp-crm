@@ -250,6 +250,33 @@ html
         padding: 4px 6px;
         border-radius: 3px;
       }
+      .notes-summary {
+        background-color: #e6f3ff;
+        border: 1px solid #b3d9ff;
+        border-radius: 6px;
+        padding: 15px;
+        margin: 20px 0;
+        color: #003d82;
+        clear: both;
+      }
+      .notes-summary h3 {
+        color: #52008c;
+        margin: 0 0 10px 0;
+        font-size: 14px;
+        font-weight: 700;
+      }
+      .notes-summary p {
+        margin: 0 0 8px 0;
+        font-size: 11px;
+        line-height: 1.5;
+        color: #2c5282;
+      }
+      .notes-summary .generated-date {
+        font-size: 9px;
+        color: #718096;
+        font-style: italic;
+        margin-top: 8px;
+      }
       .notice-invoice {
         padding: 15px;
       }
@@ -321,6 +348,16 @@ html
                 td.qty #{item.quantity}  
                 td.unit  #{moneyFormatter({amount:item.price})}
                 td.total #{moneyFormatter({amount:item.total})}
+
+        if model.notesSummary
+          .notes-summary
+            h3 #{translate('Notes Summary')}
+            p #{model.notesSummary}
+            if model.summaryGeneratedAt
+              .generated-date #{translate('Generated on')}: #{moment(model.summaryGeneratedAt).format('MMMM D, YYYY [at] h:mm A')}
+
+        table.table-invoice
+          tbody
             tr
               td(colspan='3') #{translate('SUB TOTAL')}
               td.total #{moneyFormatter({amount:model.subTotal})}
