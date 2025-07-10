@@ -33,6 +33,9 @@ const create = async (req, res) => {
     subTotal = calculate.add(subTotal, total);
     //item total
     item['total'] = total;
+    if (item.notes) {
+      item['notes'] = item.notes;
+    }
   });
   taxTotal = calculate.multiply(subTotal, taxRate / 100);
   total = calculate.add(subTotal, taxTotal);
@@ -57,7 +60,6 @@ const create = async (req, res) => {
       new: true,
     }
   ).exec();
-  // Returning successfull response
 
   increaseBySettingKey({
     settingKey: 'last_invoice_number',

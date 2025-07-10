@@ -49,6 +49,9 @@ const update = async (req, res) => {
     subTotal = calculate.add(subTotal, total);
     //item total
     item['total'] = total;
+    if (item.notes) {
+      item['notes'] = item.notes;
+    }
   });
   taxTotal = calculate.multiply(subTotal, taxRate / 100);
   total = calculate.add(subTotal, taxTotal);
@@ -72,7 +75,6 @@ const update = async (req, res) => {
   }).exec();
 
   // Returning successfull response
-
   return res.status(200).json({
     success: true,
     result,

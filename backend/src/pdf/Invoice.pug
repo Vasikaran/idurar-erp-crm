@@ -238,6 +238,18 @@ html
         margin-top:5px;
         font-size:10px;
       }
+      .item-notes {
+        display: block;
+        clear: both;
+        width: 100%;
+        color: #888;
+        margin-top: 8px;
+        font-size: 9px;
+        font-style: italic;
+        background-color: #f8f9fa;
+        padding: 4px 6px;
+        border-radius: 3px;
+      }
       .notice-invoice {
         padding: 15px;
       }
@@ -304,6 +316,8 @@ html
               tr
                 td.service #{item.itemName}
                   span #{item.description}
+                  if item.notes
+                    span.item-notes #{translate('Notes')}: #{item.notes}
                 td.qty #{item.quantity}  
                 td.unit  #{moneyFormatter({amount:item.price})}
                 td.total #{moneyFormatter({amount:item.total})}
@@ -321,6 +335,3 @@ html
           .space     
       footer.footer-invoice
         //- | Invoice was created on a computer and is valid without the signature and seal.
-          
-
-   
