@@ -325,5 +325,18 @@ const request = {
       return errorHandler(error);
     }
   },
+  generateSummary: async ({ entity, id }) => {
+    try {
+      includeToken();
+      const response = await axios.post(`${entity}/${id}/generate-summary`);
+      successHandler(response, {
+        notifyOnSuccess: true,
+        notifyOnFailed: true,
+      });
+      return response.data;
+    } catch (error) {
+      return errorHandler(error);
+    }
+  },
 };
 export default request;
