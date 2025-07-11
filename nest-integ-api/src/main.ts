@@ -9,7 +9,7 @@ async function bootstrap() {
     cors: true,
   });
 
-  const globalPrefix = 'api';
+  const globalPrefix = 'api/integration';
   app.setGlobalPrefix(globalPrefix);
   const configService = app.get(ConfigService);
   const port = (configService.get('APP_PORT') as string) || 2222;
