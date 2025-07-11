@@ -1,13 +1,14 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { AuthModule } from '@/modules/auth/auth.module';
-import { DatabaseModule } from '@/modules/database/database.module';
-import { APP_FILTER, APP_GUARD } from '@nestjs/core';
-import { AuthGuard } from '@/modules/auth/auth.guard';
-import { HttpExceptionFilter } from '@/common/filters/http-exception.filter';
-import { JwtService } from '@nestjs/jwt';
-import { HealthController } from './modules/health/health.controller';
+import { APP_GUARD, APP_FILTER } from '@nestjs/core';
+import { DatabaseModule } from './modules/database/database.module';
+import { AuthModule } from './modules/auth/auth.module';
 import { ReportsModule } from './modules/reports/reports.module';
+import { WebhooksModule } from './modules/webhooks/webhooks.module';
+import { AuthGuard } from './modules/auth/auth.guard';
+import { HttpExceptionFilter } from './common/filters/http-exception.filter';
+import { HealthController } from './modules/health/health.controller';
+import { JwtService } from '@nestjs/jwt';
 
 @Module({
   imports: [
@@ -17,8 +18,8 @@ import { ReportsModule } from './modules/reports/reports.module';
     DatabaseModule,
     AuthModule,
     ReportsModule,
+    WebhooksModule,
   ],
-  controllers: [HealthController],
   providers: [
     {
       provide: APP_GUARD,
@@ -30,5 +31,6 @@ import { ReportsModule } from './modules/reports/reports.module';
     },
     JwtService,
   ],
+  controllers: [HealthController],
 })
 export class AppModule {}
