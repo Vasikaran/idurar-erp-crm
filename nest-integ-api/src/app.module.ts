@@ -7,6 +7,7 @@ import { AuthGuard } from '@/modules/auth/auth.guard';
 import { HttpExceptionFilter } from '@/common/filters/http-exception.filter';
 import { JwtService } from '@nestjs/jwt';
 import { HealthController } from './modules/health/health.controller';
+import { ReportsModule } from './modules/reports/reports.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { HealthController } from './modules/health/health.controller';
     }),
     DatabaseModule,
     AuthModule,
+    ReportsModule,
   ],
   controllers: [HealthController],
   providers: [
