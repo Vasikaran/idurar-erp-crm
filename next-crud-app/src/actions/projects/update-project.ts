@@ -1,12 +1,15 @@
 "use server";
 
-import { apiCall } from "@/lib/api-client";
+import { apiClient } from "@/lib/api-client";
 import { projectSchema } from "@/lib/validations";
 import { Project } from "@/lib/types";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
-export async function updateProject(id: string, formData: FormData) {
+export async function updateProject(
+  id: string,
+  formData: FormData
+): Promise<void> {
   try {
     const rawData = {
       name: formData.get("name") as string,
@@ -30,35 +33,33 @@ export async function updateProject(id: string, formData: FormData) {
     const validatedFields = projectSchema.safeParse(rawData);
 
     if (!validatedFields.success) {
-      return {
-        error: "Invalid form data",
-        details: validatedFields.error.flatten().fieldErrors,
-      };
+      console.error(
+        "Validation error:",
+        validatedFields.error.flatten().fieldErrors
+      );
+      throw new Error("Invalid form data");
     }
 
-    const response = await apiCall<{ project: Project }>(
-      "PUT",
-      `/api/projects/${id}`,
-      validatedFields.data
-    );
+    const response = (
+      await apiClient.put<{
+        data: { project: Project };
+        success: boolean;
+        error: string;
+      }>(`/api/projects/${id}`, validatedFields.data)
+    ).data;
 
     if (!response.success) {
-      return {
-        error: response.error || "Failed to update project",
-        details: response.details,
-      };
+      console.error("API error:", response.error);
+      throw new Error(response.error || "Failed to update project");
     }
 
     revalidatePath("/projects");
     revalidatePath(`/projects/${id}`);
     revalidatePath(`/projects/${id}/edit`);
     revalidatePath("/projects/stats");
-
-    redirect(`/projects/${id}`);
   } catch (error) {
     console.error("Error in updateProject action:", error);
-    return {
-      error: "Failed to update project",
-    };
+    throw error;
   }
+  redirect(`/projects/${id}`);
 }

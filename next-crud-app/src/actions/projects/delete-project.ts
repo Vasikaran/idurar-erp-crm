@@ -1,4 +1,3 @@
-// src/actions/projects/delete-project.ts
 "use server";
 
 import { apiCall } from "@/lib/api-client";
@@ -11,21 +10,16 @@ export async function deleteProject(id: string) {
     const response = await apiCall<any>("DELETE", `/api/projects/${id}`);
 
     if (!response.success) {
-      return {
-        error: response.error || "Failed to delete project",
-      };
+      throw new Error(response.error || "Failed to delete project");
     }
 
-    // Revalidate paths
     revalidatePath("/projects");
     revalidatePath("/projects/stats");
-
-    // Redirect to projects list
-    redirect("/projects");
   } catch (error) {
     console.error("Error in deleteProject action:", error);
-    return {
-      error: "Failed to delete project",
-    };
+    throw new Error(
+      error instanceof Error ? error.message : "An unexpected error occurred"
+    );
   }
+  redirect("/projects");
 }

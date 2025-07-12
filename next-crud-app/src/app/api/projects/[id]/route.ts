@@ -1,4 +1,3 @@
-// src/app/api/projects/[id]/route.ts
 import { connectToDatabase } from "@/lib/mongodb";
 import { Project } from "@/lib/models/project";
 import { projectSchema } from "@/lib/validations";
@@ -6,12 +5,13 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const paramsResolved = await params;
     await connectToDatabase();
 
-    const project = await Project.findById(params.id).lean();
+    const project = await Project.findById(paramsResolved.id).lean();
 
     if (!project) {
       return NextResponse.json(

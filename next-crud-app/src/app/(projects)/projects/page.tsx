@@ -9,16 +9,6 @@ export default async function ProjectsPage() {
 
   return (
     <div className="container mx-auto p-6 space-y-6">
-      <div className="flex justify-between items-center">
-        <div>
-          <h1 className="text-3xl font-bold">Projects</h1>
-          <p className="text-gray-600">Manage your projects</p>
-        </div>
-        <Button asChild>
-          <Link href="/projects/new">+ New Project</Link>
-        </Button>
-      </div>
-
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
         {projectsData.projects.map((project) => (
           <Card key={project._id} className="hover:shadow-lg transition-shadow">

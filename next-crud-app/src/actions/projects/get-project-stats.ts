@@ -1,18 +1,19 @@
 "use server";
 
 import { cache } from "react";
-import { apiCall } from "@/lib/api-client";
+import { apiClient } from "@/lib/api-client";
 import { ProjectStatsData } from "@/lib/types";
 
 export const getProjectStats = cache(async (): Promise<ProjectStatsData> => {
   try {
-    const response = await apiCall<ProjectStatsData>(
-      "GET",
-      "/api/projects/stats"
-    );
+    const response = (
+      await apiClient<{ data: ProjectStatsData; success: boolean }>(
+        "/api/projects/stats"
+      )
+    ).data;
 
     if (!response.success) {
-      throw new Error(response.error || "Failed to fetch project statistics");
+      throw new Error("Failed to fetch project statistics");
     }
 
     return response.data!;
