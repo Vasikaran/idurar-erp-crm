@@ -11,7 +11,11 @@
     "production": "NODE_ENV=production",
     "setup": "node src/setup/setup.js",
     "upgrade": "node src/setup/upgrade.js",
-    "reset": "node src/setup/reset.js"
+    "reset": "node src/setup/reset.js",
+    "build": "echo 'Express.js - No build step required'",
+    "lint": "eslint src --ext .js",
+    "lint:fix": "eslint src --ext .js --fix",
+    "test": "echo 'No tests configured yet'"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.509.0",
@@ -43,6 +47,7 @@
     "transliteration": "^2.3.5"
   },
   "devDependencies": {
+    "eslint": "^8.56.0",
     "nodemon": "3.0.1"
   },
   "_moduleAliases": {

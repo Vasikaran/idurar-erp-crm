@@ -7,6 +7,7 @@ import storePersist from '@/redux/storePersist';
 
 function findKeyByPrefix(object, prefix) {
   for (var property in object) {
+    // eslint-disable-next-line no-prototype-builtins
     if (object.hasOwnProperty(property) && property.toString().startsWith(prefix)) {
       return property;
     }

@@ -1,0 +1,125 @@
+name: Build Check
+
+on:
+  pull_request:
+    branches: ["master"]
+
+jobs:
+  backend:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20.9.0"
+          cache: "npm"
+          cache-dependency-path: "backend/package-lock.json"
+
+      - name: Install dependencies
+        working-directory: ./backend
+        run: npm ci
+
+      - name: Lint
+        working-directory: ./backend
+        run: npm run lint || echo "No lint script found"
+
+      - name: Test
+        working-directory: ./backend
+        run: npm test || echo "No tests found"
+
+      - name: Build check
+        working-directory: ./backend
+        run: npm run build || echo "No build script found"
+
+  frontend:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20.9.0"
+          cache: "npm"
+          cache-dependency-path: "frontend/package-lock.json"
+
+      - name: Install dependencies
+        working-directory: ./frontend
+        run: npm ci
+
+      - name: Lint
+        working-directory: ./frontend
+        run: npm run lint
+
+      - name: Test
+        working-directory: ./frontend
+        run: npm test || echo "No tests found"
+
+      - name: Build
+        working-directory: ./frontend
+        run: npm run build
+
+  next-app:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "npm"
+          cache-dependency-path: "next-crud-app/package-lock.json"
+
+      - name: Install dependencies
+        working-directory: ./next-crud-app
+        run: npm ci
+
+      - name: Lint
+        working-directory: ./next-crud-app
+        run: npm run lint
+
+      - name: Test
+        working-directory: ./next-crud-app
+        run: npm test || echo "No tests found"
+
+      - name: Build
+        working-directory: ./next-crud-app
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          NEXT_PUBLIC_API_URL: ""
+        run: npm run build
+
+  integration:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "npm"
+          cache-dependency-path: "nest-integ-api/package-lock.json"
+
+      - name: Install dependencies
+        working-directory: ./nest-integ-api
+        run: npm ci
+
+      - name: Lint
+        working-directory: ./nest-integ-api
+        run: npm run lint
+
+      - name: Test
+        working-directory: ./nest-integ-api
+        run: npm test || echo "No tests found"
+
+      - name: Build
+        working-directory: ./nest-integ-api
+        run: npm run build

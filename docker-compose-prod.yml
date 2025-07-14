@@ -1,0 +1,49 @@
+version: "3.8"
+
+services:
+  fullstack:
+    image: vasidev/idurar-fullstack:latest
+    container_name: idurar-fullstack
+    restart: unless-stopped
+    ports:
+      - "8888:8888"
+    environment:
+      - DATABASE=${DATABASE_URL}
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+      - JWT_SECRET=${JWT_SECRET}
+      - NODE_ENV=${NODE_ENV}
+      - OPENSSL_CONF=${OPENSSL_CONF}
+      - PUBLIC_SERVER_FILE=${PUBLIC_SERVER_FILE}
+    networks:
+      - idurar-network
+
+  next-app:
+    image: vasidev/idurar-next-app:latest
+    container_name: idurar-next-app
+    restart: unless-stopped
+    ports:
+      - "2323:2323"
+    environment:
+      - DATABASE_URL=${DATABASE_URL}
+      - NODE_ENV=${NODE_ENV}
+      - NEXT_PUBLIC_API_URL=
+      - RUNTIME=${RUNTIME}
+    networks:
+      - idurar-network
+
+  integration:
+    image: vasidev/idurar-integration:latest
+    container_name: idurar-integration
+    restart: unless-stopped
+    ports:
+      - "2222:2222"
+    environment:
+      - APP_PORT=${APP_PORT}
+      - DATABASE_URL=${DATABASE_URL}
+      - JWT_SECRET=${JWT_SECRET}
+    networks:
+      - idurar-network
+
+networks:
+  idurar-network:
+    driver: bridge

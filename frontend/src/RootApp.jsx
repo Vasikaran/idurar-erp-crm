@@ -9,8 +9,9 @@ import PageLoader from '@/components/PageLoader';
 const IdurarOs = lazy(() => import('./apps/IdurarOs'));
 
 export default function RoutApp() {
+  const basename = import.meta.env.PROD ? '/app' : '';
   return (
-    <BrowserRouter>
+    <BrowserRouter basename={basename}>
       <Provider store={store}>
         <Suspense fallback={<PageLoader />}>
           <IdurarOs />
