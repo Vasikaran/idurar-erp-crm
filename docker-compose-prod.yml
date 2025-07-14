@@ -1,9 +1,9 @@
 version: "3.8"
 
 services:
-  backend:
-    image: vasidev/idurar-backend:latest
-    container_name: idurar-backend
+  fullstack:
+    image: vasidev/idurar-fullstack:latest
+    container_name: idurar-fullstack
     restart: unless-stopped
     ports:
       - "8888:8888"
@@ -17,9 +17,9 @@ services:
     networks:
       - idurar-network
 
-  frontend:
-    image: vasidev/idurar-frontend:latest
-    container_name: idurar-frontend
+  next-app:
+    image: vasidev/idurar-next-app:latest
+    container_name: idurar-next-app
     restart: unless-stopped
     ports:
       - "2323:2323"
@@ -28,8 +28,6 @@ services:
       - NODE_ENV=${NODE_ENV}
       - NEXT_PUBLIC_API_URL=
       - RUNTIME=${RUNTIME}
-    depends_on:
-      - backend
     networks:
       - idurar-network
 
