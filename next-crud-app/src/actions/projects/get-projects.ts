@@ -17,11 +17,18 @@ const fallbackProjectsData: ProjectsResponse = {
 export const getProjects = cache(
   async (params: GetProjectsParams = {}): Promise<ProjectsResponse> => {
     try {
+      const filteredParams = Object.fromEntries(
+        Object.entries(params).filter(
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+          ([_, value]) => value !== undefined && value !== ""
+        )
+      );
+
       const res = await apiClient.get<{
         data: ProjectsResponse;
         success: boolean;
       }>("/api/projects", {
-        params,
+        params: filteredParams,
       });
 
       if (!res.data.success) {
