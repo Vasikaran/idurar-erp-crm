@@ -41,9 +41,10 @@ export async function GET(
 
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const paramsResolved = await params;
     await connectToDatabase();
 
     const body = await request.json();
@@ -61,7 +62,7 @@ export async function PUT(
     }
 
     const project = await Project.findByIdAndUpdate(
-      params.id,
+      paramsResolved.id,
       {
         ...validatedFields.data,
         startDate: validatedFields.data.startDate
@@ -103,12 +104,13 @@ export async function PUT(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const resolveParams = await params;
     await connectToDatabase();
 
-    const project = await Project.findByIdAndDelete(params.id);
+    const project = await Project.findByIdAndDelete(resolveParams.id);
 
     if (!project) {
       return NextResponse.json(

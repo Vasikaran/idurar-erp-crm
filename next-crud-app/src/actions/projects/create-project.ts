@@ -39,7 +39,7 @@ export async function createProject(formData: FormData): Promise<void> {
     }
 
     const response = await apiClient.post<{
-      project: Project;
+      data: { project: Project };
       success: true;
       error: string;
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -51,7 +51,7 @@ export async function createProject(formData: FormData): Promise<void> {
       throw new Error(response.data.error || "Failed to create project");
     }
 
-    projectId = response.data.project._id;
+    projectId = response.data.data.project._id;
 
     revalidatePath("/projects");
     revalidatePath("/projects/stats");
