@@ -465,7 +465,6 @@ const lang = {
   closed: 'Closed',
   all_status: 'All Status',
   created_at: 'Created At',
-  created_by: 'Created By',
   query_created_successfully: 'Query created successfully',
   query_updated_successfully: 'Query updated successfully',
   query_deleted_successfully: 'Query deleted successfully',

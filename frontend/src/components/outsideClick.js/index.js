@@ -35,7 +35,7 @@ const Dropdown = ({ value, options, placeholder = 'Select', onChange }) => {
       {open && (
         <ul className="dropdown-menu">
           {options.map((opt) => (
-            <li className="dropdown-menu-item" onClick={(e) => handleChange(opt)}>
+            <li className="dropdown-menu-item" onClick={(e) => handleChange(opt)} key={opt}>
               {opt}
             </li>
           ))}
