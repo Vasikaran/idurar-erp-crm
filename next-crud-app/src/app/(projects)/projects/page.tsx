@@ -10,7 +10,7 @@ export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
 interface ProjectsPageProps {
-  searchParams: {
+  searchParams: Promise<{
     page?: string;
     limit?: string;
     status?: string;
@@ -18,20 +18,21 @@ interface ProjectsPageProps {
     search?: string;
     sortBy?: string;
     order?: "asc" | "desc";
-  };
+  }>;
 }
 
 export default async function ProjectsPage({
   searchParams,
 }: ProjectsPageProps) {
+  const resolvedSearchParams = await searchParams;
   const params = {
-    page: parseInt(searchParams.page || "1"),
-    limit: parseInt(searchParams.limit || "10"),
-    status: searchParams.status,
-    priority: searchParams.priority,
-    search: searchParams.search,
-    sortBy: searchParams.sortBy,
-    order: searchParams.order,
+    page: parseInt(resolvedSearchParams.page || "1"),
+    limit: parseInt(resolvedSearchParams.limit || "10"),
+    status: resolvedSearchParams.status,
+    priority: resolvedSearchParams.priority,
+    search: resolvedSearchParams.search,
+    sortBy: resolvedSearchParams.sortBy,
+    order: resolvedSearchParams.order,
   };
 
   const projectsData = await getProjects(params);
@@ -122,16 +123,16 @@ export default async function ProjectsPage({
           <CardContent>
             <h3 className="text-lg font-semibold mb-2">No projects found</h3>
             <p className="text-gray-600 mb-4">
-              {searchParams.search ||
-              searchParams.status ||
-              searchParams.priority
+              {resolvedSearchParams.search ||
+              resolvedSearchParams.status ||
+              resolvedSearchParams.priority
                 ? "Try adjusting your filters"
                 : "Create your first project to get started"}
             </p>
             <div className="flex gap-2 justify-center">
-              {(searchParams.search ||
-                searchParams.status ||
-                searchParams.priority) && (
+              {(resolvedSearchParams.search ||
+                resolvedSearchParams.status ||
+                resolvedSearchParams.priority) && (
                 <Button variant="outline" asChild>
                   <Link href="/projects">Clear Filters</Link>
                 </Button>
@@ -147,7 +148,7 @@ export default async function ProjectsPage({
       <Pagination
         currentPage={projectsData.pagination.page}
         totalPages={projectsData.pagination.totalPages}
-        searchParams={searchParams}
+        searchParams={resolvedSearchParams}
       />
     </div>
   );
