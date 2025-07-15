@@ -1,0 +1,256 @@
+{
+	"info": {
+		"_postman_id": "c46274b8-4e58-4ce8-a212-43c3202a7d15",
+		"name": "Next Projects App",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "30824690",
+		"_collection_link": "https://bint-app.postman.co/workspace/Pente-Assessment-~5096819a-f5ab-479c-97b0-6d4e43c4c917/collection/30824690-c46274b8-4e58-4ce8-a212-43c3202a7d15?action=share&source=collection_link&creator=30824690"
+	},
+	"item": [
+		{
+			"name": "Projects",
+			"item": [
+				{
+					"name": "Get all Projects",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/projects?page=1&limit=10&order=desc",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"projects"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "limit",
+									"value": "10"
+								},
+								{
+									"key": "status",
+									"value": "in-progress",
+									"disabled": true
+								},
+								{
+									"key": "priority",
+									"value": "high",
+									"disabled": true
+								},
+								{
+									"key": "search",
+									"value": "website",
+									"disabled": true
+								},
+								{
+									"key": "sortBy",
+									"value": "budget",
+									"disabled": true
+								},
+								{
+									"key": "order",
+									"value": "desc"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get a Project",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/projects/:id",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"projects",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "6871415a84d97cfa0dad4e32"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Search",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/projects/search?q=webs&limit=10",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"projects",
+								"search"
+							],
+							"query": [
+								{
+									"key": "q",
+									"value": "webs"
+								},
+								{
+									"key": "limit",
+									"value": "10"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Project Stats",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/projects/stats",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"projects",
+								"stats"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete a Project",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/projects/:id",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"projects",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "6871420584d97cfa0dad4e3a"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Project",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"Cloud Infrastructure Migration\",\r\n  \"description\": \"Migrate all services from on-premise to AWS cloud infrastructure\",\r\n  \"status\": \"on-hold\",\r\n  \"priority\": \"low\",\r\n  \"startDate\": \"2024-02-01\",\r\n  \"endDate\": \"2024-06-30\",\r\n  \"budget\": 150000,\r\n  \"assignedTo\": \"DevOps Team\",\r\n  \"tags\": [\"cloud\", \"aws\", \"infrastructure\", \"migration\", \"devops\"]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/projects",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"projects"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update a Project",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"E-commerce Website Redesign\",\r\n  \"description\": \"Complete redesign of the company's e-commerce platform with modern UI/UX, improved performance, and mobile responsiveness\",\r\n  \"status\": \"in-progress\",\r\n  \"priority\": \"high\",\r\n  \"startDate\": \"2024-01-15\",\r\n  \"endDate\": \"2024-04-30\",\r\n  \"budget\": 75000,\r\n  \"assignedTo\": \"John Doe\",\r\n  \"tags\": [\"web-development\", \"ui-ux\", \"e-commerce\"]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/projects/:id",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"projects",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "6871415a84d97cfa0dad4e32"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:2323",
+			"type": "string"
+		}
+	]
+}

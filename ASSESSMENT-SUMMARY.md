@@ -2,7 +2,7 @@
 
 ## Quick Start with Docker
 
-Run all services with Docker Compose:
+To run all deployed services with Docker Compose:
 
 ```bash
 docker-compose -f docker-compose-prod.yml up -d
@@ -10,10 +10,10 @@ docker-compose -f docker-compose-prod.yml up -d
 
 Services will be available at:
 
-- **Frontend**: http://localhost:3000
-- **Backend**: http://localhost:8888
-- **NestJS API**: http://localhost:3001
-- **Next.js CRUD App**: http://localhost:3002
+- **Frontend**: http://localhost:8888/app
+- **Backend**: http://localhost:8888/api
+- **NestJS API**: http://localhost:2222/api/integration
+- **Next.js CRUD App**: http://localhost:2323/projects
 
 ## Query Management Features
 
@@ -36,6 +36,8 @@ Services will be available at:
 ## NestJS Integration Features
 
 ✅ **Implemented Features:**
+
+- Swagger API documentation available
 
 - **Reporting Endpoints:**
   - `/api/integration/reports/summary` - System overview
@@ -94,5 +96,9 @@ Required environment variables (see `.env.example`):
 - Service URLs and ports
 
 ---
+
+## Postman API Collections
+
+Postman collections are available in the `/postman_api_collections` directory.
 
 **Assessment Status:** ✅ Complete - All required features implemented and validated
