@@ -1,5 +1,9 @@
 import { getServerSession, AuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
+import { connectToDatabase } from "./mongodb";
+import { Admin } from "./models/admin";
+import { AdminPassword } from "./models/adminPassword";
+import bcrypt from "bcryptjs";
 
 const authOptions: AuthOptions = {
   providers: [
@@ -14,19 +18,35 @@ const authOptions: AuthOptions = {
         },
       },
       async authorize(credentials) {
-        console.log(credentials, "credentials");
-        // Add logic here to look up the user from the credentials supplied
-        const user = { id: "1", name: "J Smith", email: "jsmith@example.com" };
+        await connectToDatabase();
 
-        if (user) {
-          // Any object returned will be saved in `user` property of the JWT
-          return user;
-        } else {
-          // If you return null then an error will be displayed advising the user to check their details.
-          return null;
+        const { email, password } = credentials ?? {};
+        if (!email || !password) return null;
 
-          // You can also Reject this callback with an Error thus the user will be sent to the error page with the error message as a query parameter
-        }
+        const user = await Admin.findOne({
+          email: email.toLowerCase(),
+          removed: false,
+        });
+        if (!user || !user.enabled) return null;
+
+        const dbPassword = await AdminPassword.findOne({
+          user: user._id,
+          removed: false,
+        });
+        if (!dbPassword) return null;
+
+        const isValid = bcrypt.compareSync(
+          dbPassword.salt + password,
+          dbPassword.password
+        );
+        if (!isValid) return null;
+
+        return {
+          id: user._id.toString(),
+          name: user.name,
+          email: user.email,
+          role: user.role,
+        };
       },
     }),
   ],
