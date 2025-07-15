@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 import { Form, Result, Button } from 'antd';
 import useOnFetch from '@/hooks/useOnFetch';
@@ -43,7 +44,7 @@ const ForgetPassword = () => {
             <Button type="primary" htmlType="submit" className="login-form-button" size="large">
               {translate('Request new Password')}
             </Button>
-            {translate('Or')} <a href="/login"> {translate('already have account Login')} </a>
+            {translate('Or')} <Link to="/login"> {translate('already have account Login')} </Link>
           </Form.Item>
         </Form>
       </Loading>

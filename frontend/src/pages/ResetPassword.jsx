@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { Link } from 'react-router-dom';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -54,7 +55,7 @@ const ResetPassword = () => {
             <Button type="primary" htmlType="submit" className="login-form-button" size="large">
               {translate('update password')}
             </Button>
-            {translate('Or')} <a href="/login"> {translate('already have account Login')} </a>
+            {translate('Or')} <Link to="/login"> {translate('already have account Login')} </Link>
           </Form.Item>
         </Form>
       </Loading>
