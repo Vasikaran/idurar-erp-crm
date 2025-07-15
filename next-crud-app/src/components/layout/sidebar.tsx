@@ -2,8 +2,10 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { FolderOpen, BarChart3 } from "lucide-react";
+import { FolderOpen, BarChart3, LogOut } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import { signOut } from "next-auth/react";
 
 const navigation = [
   { name: "Projects", href: "/projects", icon: FolderOpen },
@@ -26,7 +28,7 @@ export function Sidebar() {
   };
 
   return (
-    <div className="w-64 bg-gray-900 text-white flex flex-col">
+    <div className="w-64 bg-gray-900 text-white flex flex-col h-full">
       <div className="p-6">
         <h2 className="text-xl font-semibold">Project Manager</h2>
       </div>
@@ -52,6 +54,15 @@ export function Sidebar() {
           </Link>
         ))}
       </nav>
+      <div className="p-4 mt-auto">
+        <Button
+          variant="outline"
+          className="w-full flex items-center justify-center gap-2 bg-gray-800 text-white border-none hover:bg-gray-700"
+          onClick={() => signOut()}
+        >
+          <LogOut className="h-5 w-5" /> Logout
+        </Button>
+      </div>
     </div>
   );
 }

@@ -7,9 +7,17 @@ import {
   ProjectFilter,
   ProjectSort,
 } from "@/lib/types";
+import { getSession } from "@/lib/auth";
 
 export async function GET(request: NextRequest) {
   try {
+    const session = await getSession();
+    if (!session) {
+      return NextResponse.json(
+        { success: false, error: "Unauthorized" },
+        { status: 401 }
+      );
+    }
     await connectToDatabase();
 
     const { searchParams } = new URL(request.url);
@@ -94,6 +102,14 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
+    const session = await getSession();
+    if (!session) {
+      return NextResponse.json(
+        { success: false, error: "Unauthorized" },
+        { status: 401 }
+      );
+    }
+    
     await connectToDatabase();
 
     const body = await request.json();

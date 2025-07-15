@@ -1,9 +1,5 @@
-import { Button } from "@/components/ui/button";
+import { redirect } from "next/navigation";
 
 export default function Home() {
-  return (
-    <div>
-      <Button className="mt-4">Get Started</Button>
-    </div>
-  );
+  redirect("/projects");
 }
