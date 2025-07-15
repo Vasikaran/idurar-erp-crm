@@ -5,7 +5,7 @@
 To run all deployed services with Docker Compose:
 
 ```bash
-docker-compose -f docker-compose-prod.yml up -d
+docker compose -f docker-compose-prod.yml up --pull always
 ```
 
 Services will be available at:
