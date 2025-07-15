@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import axios from "axios";
 import { ApiResponse } from "./types";
+import { cookies } from "next/headers";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:2323";
 
@@ -13,7 +14,11 @@ export const apiClient = axios.create({
 });
 
 apiClient.interceptors.request.use(
-  (config) => {
+  async (config) => {
+    const cookieHeader = (await cookies()).toString();
+    if (cookieHeader) {
+      config.headers["Cookie"] = cookieHeader;
+    }
     return config;
   },
   (error) => {
